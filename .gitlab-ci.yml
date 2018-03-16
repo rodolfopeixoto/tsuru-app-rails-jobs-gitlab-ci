@@ -7,7 +7,7 @@ services:
   - postgres:latest
 test:
   variables:
-    POSTGRES_DB:
+    RAILS_ENV: test
   stage: test
   script:
     - apt-get update -qy
@@ -39,6 +39,8 @@ rails-best-practices:
     name: ${DEPLOY_MODE}
   variables:
     CI_PROJECT_NAME: test-app
+  script:
+    -  tsuru app-deploy -a ${CI_PROJECT_NAME}-${DEPLOY_MODE} Procfile tsuru.yaml
 staging:
   <<: *deploy_definition
   only:
@@ -46,6 +48,7 @@ staging:
   variables:
     DEPLOY_MODE: staging
 production:
+  <<: *deploy_definition
   only:
     - master
   when: manual
