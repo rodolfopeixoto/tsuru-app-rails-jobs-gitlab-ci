@@ -17,19 +17,22 @@ test:
     - bundle install --path /cache
     - bundle exec rails db:create RAILS_ENV=test
 rspec:
-  <<: *deploy_definition
+  <<: *test_definition
   script:
     - bundle exec rspec
 rubocop:
+  <<: *test_definition
   stage: test
   script:
     - bundle exec rubocop
 #https://github.com/chetan/simplecov-console ( add gem )
 brakeman:
+  <<: *test_definition
   stage: test
   script:
     - bundle exec brakeman -z -q
 rails-best-practices:
+  <<: *test_definition
   stage: test
   script:
     - rails_best_practices .
