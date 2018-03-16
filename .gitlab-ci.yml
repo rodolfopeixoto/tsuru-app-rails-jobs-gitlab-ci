@@ -1,4 +1,6 @@
-image: 'ruby:2.4'
+.jobs_template: &test_definition
+  image: 'ruby:2.4'
+  stage: test
 stages:
   - test
   - staging
@@ -14,15 +16,14 @@ test:
     - apt-get install -y nodejs
     - bundle install --path /cache
     - bundle exec rails db:create RAILS_ENV=test
-    - bundle exec rails test
 rspec:
-  stage: test
+  <<: *deploy_definition
   script:
-    - rspec spec
+    - bundle exec rspec
 rubocop:
   stage: test
   script:
-    - rubocop
+    - bundle exec rubocop
 #https://github.com/chetan/simplecov-console ( add gem )
 brakeman:
   stage: test
